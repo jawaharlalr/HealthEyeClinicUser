@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0d9488;
+  --color-primary-dark: #0f766e;
+  --color-primary-light: #f0fdfa;
+  --color-primary-hover: #115e59;
+  
+  --color-secondary: #db2777;
+  --color-secondary-dark: #9d174d;
+  --color-secondary-light: #fdf2f8;
+  --color-secondary-hover: #be185d;
+
+  --color-accent: #0284c7;
+  --color-accent-light: #f0f9ff;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes successCheckBounce {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes apptNoPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(13, 138, 148, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(13, 138, 148, 0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-check-bounce {
+  animation: successCheckBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+.animate-appt-pulse {
+  animation: apptNoPulse 2s infinite ease-in-out;
+}
