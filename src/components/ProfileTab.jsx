@@ -1,39 +1,116 @@
 import React from "react";
-import { User } from "lucide-react";
+import { User, Mail, FileText, CheckCircle2, LogOut } from "lucide-react";
 
-export default function ProfileTab({ user, appointments }) {
+export default function ProfileTab({ user, appointments, handleSignOut }) {
+  const initials = user?.displayName
+    ? user.displayName.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase()
+    : "P";
+
+  const totalAppts = appointments.length;
+  const confirmedAppts = appointments.filter(a => a.status === "Approved").length;
+  const pendingAppts = appointments.filter(a => a.status === "Pending").length;
+
   return (
-    <div className="space-y-6 animate-in fade-in duration-200 max-w-md mx-auto">
-      <h3 className="text-lg font-black text-slate-800 flex items-center gap-2 px-1">
-        <User size={18} className="text-primary" />
-        Patient Profile
-      </h3>
+    <div className="space-y-4 max-w-md mx-auto animate-in fade-in duration-200">
 
-      <div className="bg-white/70 backdrop-blur-xl border border-white/45 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col items-center text-center space-y-4">
-        {user?.photoURL ? (
-          <img src={user.photoURL} alt="Profile" className="w-20 h-20 rounded-full border-4 border-primary/20 shadow-md" referrerPolicy="no-referrer" />
-        ) : (
-          <div className="w-20 h-20 bg-primary-light/60 backdrop-blur-sm text-primary border border-primary/10 rounded-full flex items-center justify-center">
-            <User size={40} />
+      {/* Profile Hero Card */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 p-6 shadow-xl shadow-teal-600/20 text-center">
+        <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-emerald-400/15 blur-2xl" />
+
+        {/* Avatar */}
+        <div className="relative inline-flex mb-4">
+          {user?.photoURL ? (
+            <img src={user.photoURL} alt="Profile"
+              className="w-20 h-20 rounded-full border-4 border-white/30 shadow-xl" referrerPolicy="no-referrer" />
+          ) : (
+            <div className="w-20 h-20 rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center shadow-xl">
+              <span className="text-white text-2xl font-black">{initials}</span>
+            </div>
+          )}
+          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-400 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
+            <CheckCircle2 size={12} className="text-white" />
           </div>
-        )}
-
-        <div>
-          <h4 className="text-xl font-extrabold text-slate-800">{user?.displayName || "Patient"}</h4>
-          <p className="text-xs text-slate-500">{user?.email}</p>
         </div>
 
-        <div className="w-full pt-4 border-t border-slate-200/40 space-y-2 text-left text-xs">
-          <div className="flex justify-between">
-            <span className="text-slate-400 font-medium">Account Status:</span>
-            <span className="text-primary font-bold bg-primary-light/60 backdrop-blur-sm px-2 py-0.5 rounded border border-primary/10 text-[10px]">Active Session</span>
+        <div className="relative">
+          <h2 className="text-white text-xl font-black leading-tight">{user?.displayName || "Patient"}</h2>
+          <p className="text-teal-100/80 text-xs mt-0.5">{user?.email}</p>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="glass rounded-2xl p-4 text-center glass-shadow">
+          <p className="text-2xl font-black text-white">{totalAppts}</p>
+          <p className="text-[9px] font-extrabold text-white/50 uppercase tracking-wider mt-0.5">Total</p>
+        </div>
+        <div className="glass rounded-2xl p-4 text-center glass-shadow">
+          <p className="text-2xl font-black text-teal-400">{confirmedAppts}</p>
+          <p className="text-[9px] font-extrabold text-teal-600 uppercase tracking-wider mt-0.5">Confirmed</p>
+        </div>
+        <div className="glass rounded-2xl p-4 text-center glass-shadow">
+          <p className="text-2xl font-black text-amber-400">{pendingAppts}</p>
+          <p className="text-[9px] font-extrabold text-amber-600 uppercase tracking-wider mt-0.5">Pending</p>
+        </div>
+      </div>
+
+      {/* Account Info Card */}
+      <div className="glass rounded-3xl p-5 glass-shadow space-y-4">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="w-6 h-6 rounded-lg bg-teal-500/20 flex items-center justify-center border border-teal-500/25">
+            <User size={13} className="text-teal-400" />
           </div>
-          <div className="flex justify-between">
-            <span className="text-slate-400 font-medium">Consultations Filed:</span>
-            <span className="text-slate-700 font-bold">{appointments.length} Records</span>
+          <h4 className="text-xs font-extrabold text-white/80 uppercase tracking-wider">Account Details</h4>
+        </div>
+
+        {/* Name row */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-2xl bg-white/8 flex items-center justify-center shrink-0 border border-white/10">
+            <User size={15} className="text-white/50" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[9px] font-extrabold text-white/50 uppercase tracking-widest">Full Name</p>
+            <p className="text-sm font-bold text-white mt-0.5">{user?.displayName || "—"}</p>
+          </div>
+        </div>
+
+        <div className="h-px bg-white/8" />
+
+        {/* Email row */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-2xl bg-blue-500/15 flex items-center justify-center shrink-0 border border-blue-500/20">
+            <Mail size={15} className="text-blue-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[9px] font-extrabold text-white/50 uppercase tracking-widest">Email</p>
+            <p className="text-sm font-bold text-white mt-0.5 truncate">{user?.email || "—"}</p>
+          </div>
+        </div>
+
+        <div className="h-px bg-white/8" />
+
+        {/* Records row */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-2xl bg-purple-500/15 flex items-center justify-center shrink-0 border border-purple-500/20">
+            <FileText size={15} className="text-purple-400" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[9px] font-extrabold text-white/50 uppercase tracking-widest">Consultations Filed</p>
+            <p className="text-sm font-bold text-white mt-0.5">{totalAppts} {totalAppts === 1 ? "Record" : "Records"}</p>
           </div>
         </div>
       </div>
+
+      {/* Sign Out */}
+      {handleSignOut && (
+        <button onClick={handleSignOut}
+          className="w-full flex items-center justify-center gap-2 py-3.5 glass border-2 border-rose-500/30 text-rose-400 text-sm font-extrabold rounded-2xl hover:bg-rose-500/15 hover:border-rose-500/50 transition-all duration-200 active:scale-[0.99] cursor-pointer">
+          <LogOut size={15} />
+          Sign Out
+        </button>
+      )}
+
     </div>
   );
 }

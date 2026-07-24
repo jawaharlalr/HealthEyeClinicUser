@@ -25,34 +25,40 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-tr from-slate-50 via-slate-100 to-primary-light/25 flex items-center justify-center font-sans text-primary">
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs font-bold uppercase tracking-widest mt-2 animate-pulse">Loading Portal...</span>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/30 to-white flex items-center justify-center font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="relative">
+            <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin" />
+            <div className="absolute inset-0 w-12 h-12 rounded-full bg-teal-400/20 blur-xl" />
+          </div>
+          <span className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-teal-600 mt-1 animate-pulse">Loading Portal</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/20 text-slate-700 font-sans flex flex-col items-center justify-start p-4 relative overflow-hidden">
-      {/* Premium Glassmorphic Background Mesh Glows */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary/8 blur-[120px] animate-pulse duration-[10000ms]"></div>
-        <div className="absolute -bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-secondary/6 blur-[120px] animate-pulse duration-[15000ms] delay-3000"></div>
-        <div className="absolute top-[30%] right-[20%] w-[30vw] h-[30vw] rounded-full bg-primary-light/40 blur-[100px] animate-pulse duration-[12000ms] delay-1000"></div>
-      </div>
+    <div className="min-h-screen text-slate-700 font-sans flex flex-col items-center justify-start relative overflow-hidden">
       
+      {/* Glass background mesh */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-slate-50 via-teal-50/20 to-white">
+        <div className="absolute -top-[15%] -left-[15%] w-[55vw] h-[55vw] rounded-full bg-teal-400/8 blur-[140px] animate-float-orb" />
+        <div className="absolute -bottom-[15%] -right-[15%] w-[55vw] h-[55vw] rounded-full bg-pink-300/6 blur-[140px] animate-float-orb" style={{ animationDelay: "5s" }} />
+        <div className="absolute top-[25%] right-[15%] w-[35vw] h-[35vw] rounded-full bg-emerald-200/10 blur-[120px] animate-float-orb" style={{ animationDelay: "10s" }} />
+        {/* Subtle noise/grain overlay for premium feel */}
+        <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")" }} />
+      </div>
+
       {/* Toast Messages */}
       {message && (
-        <div className={`fixed top-4 left-4 right-4 z-50 flex items-center gap-3 p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md transition-all duration-300 border ${
+        <div className={`fixed top-4 left-4 right-4 z-50 flex items-center gap-3 p-4 rounded-2xl glass-strong glass-shadow-lg transition-all duration-300 border ${
           message.type === "success"
-            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-900"
-            : "bg-rose-500/10 border-rose-500/30 text-rose-900"
+            ? "border-emerald-200/50 text-emerald-900"
+            : "border-rose-200/50 text-rose-900"
         }`}>
           {message.type === "success" ? <CheckCircle size={20} className="text-emerald-600" /> : <AlertCircle size={20} className="text-rose-600" />}
           <p className="text-xs font-extrabold flex-1">{message.text}</p>
-          <button onClick={() => setMessage(null)} className="text-slate-450 hover:text-slate-700 cursor-pointer">
+          <button onClick={() => setMessage(null)} className="text-slate-400 hover:text-slate-700 cursor-pointer transition-colors">
             <X size={18} />
           </button>
         </div>

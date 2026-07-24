@@ -1,27 +1,171 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════
+   BASELINE & GLASS AMBIENT BACKDROP
+   ═══════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: transparent;
+}
+
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  background-attachment: fixed;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #f8fafc;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ambient glowing background orbs for deep glass depth */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: -1;
+  opacity: 0.45;
+  animation: floatOrb 15s ease-in-out infinite;
+}
+
+body::before {
+  top: -100px;
+  left: -100px;
+  background: rgba(13, 148, 148, 0.5);
+  /* Primary Teal Glow */
+}
+
+body::after {
+  bottom: -100px;
+  right: -100px;
+  background: rgba(219, 39, 119, 0.4);
+  /* Secondary Pink Glow */
+}
+
 @theme {
   --color-primary: #0d9488;
   --color-primary-dark: #0f766e;
-  --color-primary-light: #f0fdfa;
+  --color-primary-light: rgba(13, 148, 148, 0.1);
   --color-primary-hover: #115e59;
-  
+
   --color-secondary: #db2777;
   --color-secondary-dark: #9d174d;
-  --color-secondary-light: #fdf2f8;
+  --color-secondary-light: rgba(219, 39, 119, 0.1);
   --color-secondary-hover: #be185d;
 
   --color-accent: #0284c7;
-  --color-accent-light: #f0f9ff;
+  --color-accent-light: rgba(2, 132, 199, 0.1);
 
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
+
+/* ═══════════════════════════════════════════
+   GLASSMORPHISM DESIGN SYSTEM (Dark/Translucent Glass)
+   ═══════════════════════════════════════════ */
+
+/* Standard Glass Card */
+.glass {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Strong Glass Card */
+.glass-strong {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Darker Deep Glass Variant */
+.glass-dark {
+  background: rgba(10, 15, 30, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Glass Navigation Bar */
+.glass-nav {
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glass Sidebar */
+.glass-sidebar {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Glass Card Shadows with Inner Highlights */
+.glass-shadow {
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-shadow-lg {
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Smooth Hover Lift & Glow Effect */
+.glass-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-hover:hover {
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.4),
+    0 6px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Hide scrollbar for snap containers */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
 
 @keyframes modalFadeIn {
   from {
     opacity: 0;
     transform: translateY(24px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -33,12 +177,15 @@
     transform: scale(0.3);
     opacity: 0;
   }
+
   50% {
     transform: scale(1.15);
   }
+
   70% {
     transform: scale(0.9);
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -46,11 +193,30 @@
 }
 
 @keyframes apptNoPulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(13, 138, 148, 0.3);
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(13, 138, 148, 0.5);
   }
+
   50% {
-    box-shadow: 0 0 0 8px rgba(13, 138, 148, 0);
+    box-shadow: 0 0 0 12px rgba(13, 138, 148, 0);
+  }
+}
+
+@keyframes floatOrb {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -25px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 15px) scale(0.95);
   }
 }
 
@@ -66,11 +232,16 @@
   animation: apptNoPulse 2s infinite ease-in-out;
 }
 
+.animate-float-orb {
+  animation: floatOrb 15s ease-in-out infinite;
+}
+
 /* Custom drawing & running animations for success modal */
 @keyframes checkmarkCircle {
   0% {
     stroke-dashoffset: 166;
   }
+
   100% {
     stroke-dashoffset: 0;
   }
@@ -80,6 +251,7 @@
   0% {
     stroke-dashoffset: 48;
   }
+
   100% {
     stroke-dashoffset: 0;
   }
@@ -89,8 +261,9 @@
   0% {
     fill: transparent;
   }
+
   100% {
-    fill: #0d9488; /* Theme primary color */
+    fill: #0d9488;
   }
 }
 
@@ -98,6 +271,7 @@
   0% {
     width: 0%;
   }
+
   100% {
     width: 100%;
   }
@@ -129,9 +303,11 @@
     transform: scale(0.3) rotate(0deg);
     opacity: 0;
   }
+
   60% {
     transform: scale(1.1) rotate(380deg);
   }
+
   100% {
     transform: scale(1) rotate(360deg);
     opacity: 1;
@@ -144,39 +320,121 @@
 }
 
 @keyframes flaskSpread1 {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translate(-45px, -45px) scale(1); opacity: 0; }
-}
-@keyframes flaskSpread2 {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translate(45px, -45px) scale(1); opacity: 0; }
-}
-@keyframes flaskSpread3 {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translate(-55px, 15px) scale(1); opacity: 0; }
-}
-@keyframes flaskSpread4 {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translate(55px, 25px) scale(1); opacity: 0; }
-}
-@keyframes flaskSpread5 {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translate(-25px, 55px) scale(1); opacity: 0; }
-}
-@keyframes flaskSpread6 {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translate(25px, 55px) scale(1); opacity: 0; }
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-45px, -45px) scale(1);
+    opacity: 0;
+  }
 }
 
-.animate-flask-1 { animation: flaskSpread1 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
-.animate-flask-2 { animation: flaskSpread2 1.3s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
-.animate-flask-3 { animation: flaskSpread3 1.6s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
-.animate-flask-4 { animation: flaskSpread4 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
-.animate-flask-5 { animation: flaskSpread5 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
-.animate-flask-6 { animation: flaskSpread6 1.7s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+@keyframes flaskSpread2 {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(45px, -45px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes flaskSpread3 {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-55px, 15px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes flaskSpread4 {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(55px, 25px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes flaskSpread5 {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-25px, 55px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes flaskSpread6 {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(25px, 55px) scale(1);
+    opacity: 0;
+  }
+}
+
+.animate-flask-1 {
+  animation: flaskSpread1 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-flask-2 {
+  animation: flaskSpread2 1.3s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-flask-3 {
+  animation: flaskSpread3 1.6s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-flask-4 {
+  animation: flaskSpread4 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-flask-5 {
+  animation: flaskSpread5 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-flask-6 {
+  animation: flaskSpread6 1.7s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
