@@ -146,21 +146,16 @@ export default function BookTab({
                 <button
                   type="button"
                   disabled={!isAvailable}
-                  onClick={() => setBookingTime(slot)}
+                  onClick={() => setBookingTime(isSelected ? "" : slot)}
                   className={`w-full py-3 px-2 rounded-xl text-xs font-bold border transition-all cursor-pointer flex flex-col items-center justify-center gap-1 ${
                     isSelected
-                      ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]"
+                      ? "bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20 scale-[1.02]"
                       : isAvailable
                       ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/70 hover:border-emerald-300"
                       : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60"
                   }`}
                 >
                   <span>{slot}</span>
-                  {isSelected && (
-                    <span className="text-[8px] font-extrabold uppercase tracking-wide px-1.5 py-0.5 rounded bg-white/20 text-white">
-                      Selected
-                    </span>
-                  )}
                 </button>
                 <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-20 bg-slate-800 text-white text-[9px] font-bold py-1.5 px-2 rounded-lg text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-md z-30 before:content-[''] before:absolute before:top-full before:left-1/2 before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-800">
                   {isSelected ? "Selected" : isAvailable ? "Available" : "Booked"}
@@ -389,12 +384,17 @@ export default function BookTab({
                           setBookingTime("");
                           return;
                         }
-                        setBookingDate(dateStr);
-                        setBookingTime("");
+                        if (isSelected) {
+                          setBookingDate("");
+                          setBookingTime("");
+                        } else {
+                          setBookingDate(dateStr);
+                          setBookingTime("");
+                        }
                       }}
                       className={`h-9 w-full rounded-xl text-[10px] font-bold transition-all flex flex-col items-center justify-center relative cursor-pointer ${
                         isSelected
-                          ? "bg-primary text-white font-extrabold shadow-sm shadow-primary/20 scale-[1.05]"
+                          ? "bg-emerald-600 text-white font-extrabold shadow-sm shadow-emerald-600/20 scale-[1.05]"
                           : disabled
                           ? "bg-slate-100/50 text-slate-300 cursor-not-allowed opacity-40"
                           : isMonday
