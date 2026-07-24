@@ -15,23 +15,23 @@ export default async function handler(req, res) {
   const apiKey = process.env.WHATSAPP_API_KEY || "";
   const phoneId = process.env.WHATSAPP_PHONE_ID || "";
   const sender = process.env.WHATSAPP_SENDER || "";
-  const clinicPhone = process.env.CLINIC_PHONE || "8072097048";
+  const targetPhone = appt.phone || "8072097048";
 
-  const cleanPhone = clinicPhone.replace(/\D/g, "");
+  const cleanPhone = targetPhone.replace(/\D/g, "");
   const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
   if (!formattedPhone) {
-    console.error("Clinic WhatsApp Alert: No valid clinic phone number found.");
-    return res.status(500).json({ error: "No valid clinic phone number found" });
+    console.error("Clinic WhatsApp Alert: No valid phone number found.");
+    return res.status(500).json({ error: "No valid phone number found" });
   }
 
-  const messageText = `Dear Doctor/Staff, a new eye checkup appointment has been booked.
+  const messageText = `Dear ${appt.patientName}, your eye checkup appointment has been successfully booked.
 
-Patient: ${appt.patientName}
-Phone: ${appt.phone}
+Appt No: ${appt.appointmentNo}
 Date: ${appt.date}
 Time: ${appt.time}
-Appt No: ${appt.appointmentNo}`;
+
+Thank you for choosing Healthy Eye Clinic.`;
 
   try {
     if (provider === "Simulation") {

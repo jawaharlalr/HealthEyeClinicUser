@@ -65,3 +65,118 @@
 .animate-appt-pulse {
   animation: apptNoPulse 2s infinite ease-in-out;
 }
+
+/* Custom drawing & running animations for success modal */
+@keyframes checkmarkCircle {
+  0% {
+    stroke-dashoffset: 166;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmarkCheck {
+  0% {
+    stroke-dashoffset: 48;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes circleFill {
+  0% {
+    fill: transparent;
+  }
+  100% {
+    fill: #0d9488; /* Theme primary color */
+  }
+}
+
+@keyframes progressRun {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: checkmarkCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.animate-checkmark-check {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkmarkCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.55s forwards;
+}
+
+.animate-circle-fill {
+  animation: circleFill 0.4s ease-in-out 0.4s forwards;
+}
+
+.animate-progress-run {
+  animation: progressRun 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Tick spinning & green flasks/sparks spreading confirmation animations */
+@keyframes tickSpin {
+  0% {
+    transform: scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(380deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.animate-tick-spin {
+  transform-origin: center;
+  animation: tickSpin 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+@keyframes flaskSpread1 {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translate(-45px, -45px) scale(1); opacity: 0; }
+}
+@keyframes flaskSpread2 {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translate(45px, -45px) scale(1); opacity: 0; }
+}
+@keyframes flaskSpread3 {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translate(-55px, 15px) scale(1); opacity: 0; }
+}
+@keyframes flaskSpread4 {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translate(55px, 25px) scale(1); opacity: 0; }
+}
+@keyframes flaskSpread5 {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translate(-25px, 55px) scale(1); opacity: 0; }
+}
+@keyframes flaskSpread6 {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translate(25px, 55px) scale(1); opacity: 0; }
+}
+
+.animate-flask-1 { animation: flaskSpread1 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+.animate-flask-2 { animation: flaskSpread2 1.3s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+.animate-flask-3 { animation: flaskSpread3 1.6s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+.animate-flask-4 { animation: flaskSpread4 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+.animate-flask-5 { animation: flaskSpread5 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+.animate-flask-6 { animation: flaskSpread6 1.7s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }

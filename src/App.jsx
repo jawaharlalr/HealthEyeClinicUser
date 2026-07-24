@@ -58,11 +58,7 @@ export default function App() {
         </div>
       )}
 
-      {user ? (
-        <Dashboard user={user} showMsg={showMsg} />
-      ) : (
-        <Login showMsg={showMsg} />
-      )}
+      <Dashboard user={user} showMsg={showMsg} />
     </div>
   );
 }
