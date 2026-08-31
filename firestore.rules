@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Slot Locks Collection (Atomic Slot Reservation)
+    // Allows public availability reading. Creates slot lock ONLY if it does not already exist.
+    match /slot_locks/{slotKey} {
+      allow read: if true;
+      allow create: if !exists(/databases/$(database)/documents/slot_locks/$(slotKey))
+                    && request.resource.data.keys().hasAll(['bookedAt', 'appointmentId', 'patientId', 'date', 'slotId']);
+      allow update, delete: if false;
+    }
+
+    // 2. Appointments Collection
+    // Allows creation of new appointments with required schema validation.
+    match /appointments/{appointmentId} {
+      allow create: if request.resource.data.appointmentId == appointmentId
+                    && request.resource.data.keys().hasAll([
+                      'appointmentId', 'patientId', 'patientName', 'mobile', 
+                      'date', 'slotId', 'startTime', 'endTime', 'slot', 'status', 'slotKey'
+                    ])
+                    && request.resource.data.status == 'booked';
+      allow read: if true;
+      allow update, delete: if false;
+    }
+
+    // 3. Patients Collection
+    // Allows patient record lookup and initial registration.
+    match /patients/{patientId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.patientId == patientId
+                            && request.resource.data.keys().hasAll(['patientId', 'fullName', 'mobile']);
+      allow delete: if false;
+    }
+
+  }
+}
