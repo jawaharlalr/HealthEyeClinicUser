@@ -320,7 +320,7 @@ export async function cancelAppointmentAtomic(appointmentId) {
     }
   }
 
-  const localApp = cancelLocalAppointment(appointmentId);
+  cancelLocalAppointment(appointmentId);
 
   return { success: true, message: 'Appointment cancelled successfully' };
 }
