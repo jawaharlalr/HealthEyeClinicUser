@@ -5,11 +5,11 @@ import { CLINIC_INFO } from '../utils/appointmentSlots';
 
 export default function About() {
   return (
-    <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 bg-slate-50 text-slate-900">
       
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-200">
+        <span className="text-xs font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-200">
           About Our Clinic
         </span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -25,8 +25,8 @@ export default function About() {
         
         {/* Left Branding Card */}
         <div className="lg:col-span-5">
-          <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-card text-center space-y-6">
-            <div className="w-40 h-40 mx-auto rounded-full bg-slate-900 border-4 border-teal-500/30 p-4 flex items-center justify-center shadow-lg">
+          <div className="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-card text-center space-y-6">
+            <div className="w-40 h-40 mx-auto rounded-full bg-teal-50 border-4 border-teal-100 p-4 flex items-center justify-center shadow-inner">
               <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
             
@@ -52,22 +52,22 @@ export default function About() {
               </div>
             </div>
 
-            {/* Lead Optometrist Card */}
-            <div className="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 text-left space-y-2.5 shadow-md">
+            {/* Lead Optometrist Card (Light Theme) */}
+            <div className="bg-gradient-to-br from-teal-50/80 to-blue-50/60 rounded-2xl p-5 border border-teal-200 text-left space-y-2.5 shadow-sm">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-teal-500 text-slate-950 font-extrabold flex items-center justify-center text-sm shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-teal-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
                   NK
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-teal-400 uppercase tracking-wider block">
+                  <span className="text-[10px] font-bold text-teal-800 uppercase tracking-wider block">
                     Lead Vision Specialist
                   </span>
-                  <h3 className="text-base font-extrabold text-white">
+                  <h3 className="text-base font-extrabold text-slate-900">
                     Optometrist Nandhini K
                   </h3>
                 </div>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed pt-2 border-t border-slate-800">
+              <p className="text-xs text-slate-600 leading-relaxed pt-2 border-t border-teal-100">
                 Dedicated primary vision care practitioner managing comprehensive refraction, spectacle prescription, contact lens fitting, and ocular disease screening.
               </p>
             </div>
@@ -88,11 +88,11 @@ export default function About() {
             We focus on accurate visual testing, prescribing high-quality spectacle lenses, conducting contact lens consultations, and performing preventive screenings for common ocular conditions such as cataracts, glaucoma, and elevated intraocular pressure.
           </p>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
             <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider">
               Core Clinical Commitments:
             </h3>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700 font-medium">
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-teal-600 flex-shrink-0" />
                 <span>Comprehensive Eye Examinations</span>
@@ -131,7 +131,7 @@ export default function About() {
 
             <a
               href={`tel:${CLINIC_INFO.phone.replace(/\s/g, '')}`}
-              className="inline-flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm px-5 py-3.5 rounded-xl border border-slate-300 transition"
+              className="inline-flex items-center space-x-2 bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm px-5 py-3.5 rounded-xl border border-slate-300 transition"
             >
               <PhoneCall className="w-4 h-4 text-teal-600" />
               <span>Call Clinic</span>

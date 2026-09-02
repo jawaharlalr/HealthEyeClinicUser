@@ -171,7 +171,7 @@ export default function BookingSuccess() {
                 href={generateGoogleCalendarUrl(appointment)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition"
+                className="w-full inline-flex items-center justify-center space-x-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-extrabold px-4 py-2.5 rounded-xl shadow-sm transition"
               >
                 <ExternalLink className="w-4 h-4 text-teal-400" />
                 <span>Add to Google Calendar</span>

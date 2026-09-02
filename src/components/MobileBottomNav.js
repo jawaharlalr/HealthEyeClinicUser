@@ -9,25 +9,25 @@ export default function MobileBottomNav() {
 
   return (
     <div className="md:hidden">
-      {/* Fixed Sticky Mobile Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 shadow-2xl p-2.5">
+      {/* Light Theme Fixed Sticky Mobile Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl p-2.5">
         <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
           
           {/* Call Action */}
           <a
             href={phoneCallUrl}
-            className="flex flex-col items-center justify-center py-2 px-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl border border-slate-700 transition active:scale-95"
+            className="flex flex-col items-center justify-center py-2 px-2 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl border border-slate-200 transition active:scale-95 shadow-sm"
           >
-            <Phone className="w-5 h-5 text-teal-400 mb-0.5" />
-            <span className="text-[11px] font-bold tracking-tight">Call</span>
+            <Phone className="w-5 h-5 text-teal-600 mb-0.5" />
+            <span className="text-[11px] font-bold tracking-tight text-slate-800">Call</span>
           </a>
 
           {/* Book Action (Highlighted Primary) */}
           <Link
             to="/appointment"
-            className="flex flex-col items-center justify-center py-2 px-2 bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-xl font-extrabold shadow-md transition active:scale-95"
+            className="flex flex-col items-center justify-center py-2 px-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-extrabold shadow-md transition active:scale-95"
           >
-            <Calendar className="w-5 h-5 text-slate-950 mb-0.5" />
+            <Calendar className="w-5 h-5 text-white mb-0.5" />
             <span className="text-[11px] font-extrabold tracking-tight">Book</span>
           </Link>
 
@@ -36,10 +36,10 @@ export default function MobileBottomNav() {
             href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center py-2 px-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl border border-slate-700 transition active:scale-95"
+            className="flex flex-col items-center justify-center py-2 px-2 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl border border-slate-200 transition active:scale-95 shadow-sm"
           >
-            <Navigation className="w-5 h-5 text-teal-400 mb-0.5" />
-            <span className="text-[11px] font-bold tracking-tight">Directions</span>
+            <Navigation className="w-5 h-5 text-teal-600 mb-0.5" />
+            <span className="text-[11px] font-bold tracking-tight text-slate-800">Directions</span>
           </a>
 
         </div>
