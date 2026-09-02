@@ -11,7 +11,7 @@ import {
   deleteDoc,
   serverTimestamp 
 } from 'firebase/firestore';
-import { getSlotKey, generateAppointmentId } from '../utils/appointmentSlots';
+import { getSlotKey, generateAppointmentId, isSlotInPast } from '../utils/appointmentSlots';
 import { cleanMobileInput } from '../utils/validation';
 
 /**
@@ -112,6 +112,16 @@ export async function bookAppointmentAtomic(bookingDetails) {
 
   const dateStr = date;
   const slotId = slot.id;
+
+  // Real-time backend validation: reject slots whose appointment start time has already passed
+  if (isSlotInPast(dateStr, slot.startTime)) {
+    return {
+      success: false,
+      error: "This appointment time has already passed. Please choose a future time slot.",
+      code: "SLOT_PASSED"
+    };
+  }
+
   const slotKey = getSlotKey(dateStr, slotId);
   const appointmentId = generateAppointmentId();
 

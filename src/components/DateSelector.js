@@ -1,13 +1,15 @@
 import React from 'react';
 import { Calendar as CalendarIcon, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { isMonday, isPastDate, formatReadableDate } from '../utils/appointmentSlots';
+import { isMonday, isPastDate, formatReadableDate, getTodayDateStrIST } from '../utils/appointmentSlots';
 
 export default function DateSelector({ selectedDate, onSelectDate }) {
-  // Generate quick pick pills for upcoming valid clinic days (Tue-Sun)
+  const todayISTStr = getTodayDateStrIST();
+
+  // Generate quick pick pills for upcoming valid clinic days (Tue-Sun) starting from today
   const getUpcomingDays = () => {
     const days = [];
-    let current = new Date();
-    current.setHours(0, 0, 0, 0);
+    const [y, m, d] = todayISTStr.split('-').map(Number);
+    let current = new Date(y, m - 1, d);
 
     while (days.length < 6) {
       const year = current.getFullYear();
@@ -20,7 +22,8 @@ export default function DateSelector({ selectedDate, onSelectDate }) {
           dateStr,
           dayName: current.toLocaleDateString('en-US', { weekday: 'short' }),
           dayNum: current.getDate(),
-          monthName: current.toLocaleDateString('en-US', { month: 'short' })
+          monthName: current.toLocaleDateString('en-US', { month: 'short' }),
+          isToday: dateStr === todayISTStr
         });
       }
       current.setDate(current.getDate() + 1);
@@ -37,9 +40,6 @@ export default function DateSelector({ selectedDate, onSelectDate }) {
 
   const isSelectedMonday = isMonday(selectedDate);
   const isSelectedPast = isPastDate(selectedDate);
-
-  const today = new Date();
-  const minDateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   return (
     <div className="space-y-6">
@@ -72,7 +72,9 @@ export default function DateSelector({ selectedDate, onSelectDate }) {
                     : 'bg-white text-slate-700 border-slate-200 hover:border-teal-400 hover:bg-teal-50/50'
                 }`}
               >
-                <span className="block text-xs font-semibold uppercase">{item.dayName}</span>
+                <span className="block text-[11px] font-bold uppercase tracking-wider opacity-90">
+                  {item.isToday ? 'Today' : item.dayName}
+                </span>
                 <span className="block text-lg font-extrabold">{item.dayNum}</span>
                 <span className="block text-[10px] opacity-80">{item.monthName}</span>
               </button>
@@ -90,7 +92,7 @@ export default function DateSelector({ selectedDate, onSelectDate }) {
           <input
             id="appointment-date"
             type="date"
-            min={minDateStr}
+            min={todayISTStr}
             value={selectedDate || ''}
             onChange={handleDateChange}
             className="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 text-slate-900 font-semibold focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none shadow-sm"

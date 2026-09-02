@@ -7,7 +7,7 @@ import PatientForm from '../components/PatientForm';
 import BookingSummary from '../components/BookingSummary';
 import ExistingPatientModal from '../components/ExistingPatientModal';
 import { bookAppointmentAtomic, getAppointmentsByMobile, cancelAppointmentAtomic } from '../firebase/appointmentService';
-import { isMonday, isPastDate, formatReadableDate, CLINIC_INFO } from '../utils/appointmentSlots';
+import { isMonday, isPastDate, formatReadableDate, CLINIC_INFO, getInitialAppointmentDate } from '../utils/appointmentSlots';
 import { cleanMobileInput } from '../utils/validation';
 import { useSlotAvailability } from '../hooks/useSlotAvailability';
 import { UserCheck, FileText, ArrowLeft, Calendar, Search, History, MapPin, Phone, Info, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
@@ -49,20 +49,10 @@ export default function Appointment() {
   const [pastError, setPastError] = useState('');
   const [cancellingId, setCancellingId] = useState(null);
 
-  // Initialize with next valid clinic day
+  // Initialize with initial valid clinic date (today if working day with remaining slots, or next valid working day)
   useEffect(() => {
     if (!selectedDate) {
-      let candidate = new Date();
-      candidate.setDate(candidate.getDate() + 1);
-      
-      if (candidate.getDay() === 1) {
-        candidate.setDate(candidate.getDate() + 1);
-      }
-      
-      const year = candidate.getFullYear();
-      const month = String(candidate.getMonth() + 1).padStart(2, '0');
-      const day = String(candidate.getDate()).padStart(2, '0');
-      setSelectedDate(`${year}-${month}-${day}`);
+      setSelectedDate(getInitialAppointmentDate());
     }
   }, [selectedDate]);
 

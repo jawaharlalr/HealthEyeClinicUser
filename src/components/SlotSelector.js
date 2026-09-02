@@ -1,6 +1,6 @@
 import React from 'react';
 import { Clock, CheckCircle2, Lock, AlertCircle } from 'lucide-react';
-import { CLINIC_SLOTS, formatReadableDate } from '../utils/appointmentSlots';
+import { CLINIC_SLOTS, formatReadableDate, isSlotInPast, isToday } from '../utils/appointmentSlots';
 
 export default function SlotSelector({
   selectedDate,
@@ -10,7 +10,14 @@ export default function SlotSelector({
   loading = false,
   onChangeDate
 }) {
-  const isAllBooked = bookedSlotIds.length >= CLINIC_SLOTS.length;
+  // Check if every slot is either already booked or has passed in Asia/Kolkata time
+  const isAllUnavailable = CLINIC_SLOTS.every((slot) => {
+    const isBooked = bookedSlotIds.includes(slot.id);
+    const isPassed = isSlotInPast(selectedDate, slot.startTime);
+    return isBooked || isPassed;
+  });
+
+  const dateIsToday = isToday(selectedDate);
 
   return (
     <div className="space-y-6">
@@ -41,21 +48,25 @@ export default function SlotSelector({
             Checking available times...
           </p>
         </div>
-      ) : isAllBooked ? (
-        <div className="p-6 bg-pink-50 border border-pink-200 rounded-2xl text-center space-y-4">
+      ) : isAllUnavailable ? (
+        <div className="p-6 bg-pink-50 border border-pink-200 rounded-2xl text-center space-y-4 animate-fadeIn">
           <AlertCircle className="w-10 h-10 text-pink-600 mx-auto" />
           <div>
             <h4 className="text-base font-bold text-pink-900">
-              No available times for this date.
+              {dateIsToday
+                ? "No more appointment slots are available for today."
+                : "No available times for this date."}
             </h4>
-            <p className="text-xs sm:text-sm text-pink-700 mt-1">
-              All times for {formatReadableDate(selectedDate)} are already booked. Please choose another date.
+            <p className="text-xs sm:text-sm text-pink-700 mt-1 max-w-md mx-auto">
+              {dateIsToday
+                ? "All appointment slots for today have already passed or been booked. Please choose another date."
+                : `All times for ${formatReadableDate(selectedDate)} are already booked. Please choose another date.`}
             </p>
           </div>
           <button
             type="button"
             onClick={onChangeDate}
-            className="inline-flex items-center px-4 py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-semibold text-xs rounded-xl shadow-sm transition"
+            className="inline-flex items-center px-5 py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition"
           >
             Choose another date
           </button>
@@ -64,8 +75,33 @@ export default function SlotSelector({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {CLINIC_SLOTS.map((slot) => {
             const isBooked = bookedSlotIds.includes(slot.id);
+            const isPassed = isSlotInPast(selectedDate, slot.startTime);
             const isSelected = selectedSlot && selectedSlot.id === slot.id;
 
+            // Slot in past (time has passed)
+            if (isPassed) {
+              return (
+                <div
+                  key={slot.id}
+                  className="p-5 rounded-2xl border-2 border-slate-200 bg-slate-100 text-slate-400 flex flex-col justify-between h-28 cursor-not-allowed select-none opacity-60"
+                  title="This time slot has already passed"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-base sm:text-lg font-extrabold text-slate-400 line-through">
+                      {slot.label}
+                    </span>
+                    <Clock className="w-4 h-4 text-slate-400" />
+                  </div>
+                  <div>
+                    <span className="inline-block text-[11px] bg-slate-200 text-slate-500 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                      Passed
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+
+            // Slot already booked
             if (isBooked) {
               return (
                 <div
@@ -79,7 +115,7 @@ export default function SlotSelector({
                     <Lock className="w-4 h-4 text-slate-400" />
                   </div>
                   <div>
-                    <span className="inline-block text-xs bg-pink-100 text-pink-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="inline-block text-[11px] bg-pink-100 text-pink-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
                       Booked
                     </span>
                   </div>
@@ -87,6 +123,7 @@ export default function SlotSelector({
               );
             }
 
+            // Available future slot
             return (
               <button
                 key={slot.id}
@@ -107,7 +144,7 @@ export default function SlotSelector({
 
                 <div>
                   <span
-                    className={`inline-block text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider transition ${
+                    className={`inline-block text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider transition ${
                       isSelected
                         ? 'bg-white/20 text-white'
                         : 'bg-teal-50 text-teal-700 border border-teal-200 group-hover:bg-teal-600 group-hover:text-white'
