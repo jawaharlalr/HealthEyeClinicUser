@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import ServiceCard from '../components/ServiceCard';
@@ -12,6 +12,49 @@ import {
 import { CLINIC_INFO } from '../utils/appointmentSlots';
 
 export default function Home() {
+
+  useEffect(() => {
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "Optician",
+      "name": CLINIC_INFO.name,
+      "description": "Comprehensive Eye Examinations, Refraction, Spectacles, Contact Lens fitting, Cataract & Glaucoma Screenings in Medavakkam, Chennai.",
+      "telephone": "+918072097048",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "12A, Surya Nagar, 1st Cross Street, Medavakkam",
+        "addressLocality": "Chennai",
+        "addressRegion": "Tamil Nadu",
+        "postalCode": "600100",
+        "addressCountry": "IN"
+      },
+      "employee": {
+        "@type": "Person",
+        "name": "Nandhini K",
+        "jobTitle": "Optometrist",
+        "worksFor": CLINIC_INFO.name
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "11:00",
+          "closes": "16:00"
+        }
+      ]
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'hec-schema-jsonld';
+    script.innerHTML = JSON.stringify(schemaData);
+    document.head.appendChild(script);
+
+    return () => {
+      const existing = document.getElementById('hec-schema-jsonld');
+      if (existing) document.head.removeChild(existing);
+    };
+  }, []);
 
   const topServices = [
     {

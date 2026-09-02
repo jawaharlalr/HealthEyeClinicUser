@@ -51,6 +51,26 @@ export default function About() {
                 <span>{CLINIC_INFO.phone}</span>
               </div>
             </div>
+
+            {/* Lead Optometrist Card */}
+            <div className="bg-gradient-to-br from-teal-50 to-blue-50/50 rounded-2xl p-5 border border-teal-200 text-left space-y-2">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-teal-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
+                  NK
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block">
+                    Lead Specialist
+                  </span>
+                  <h3 className="text-base font-extrabold text-slate-900">
+                    Optometrist Nandhini K
+                  </h3>
+                </div>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed pt-1 border-t border-teal-100/60">
+                Dedicated primary vision care practitioner managing comprehensive refraction, spectacle prescription, contact lens fitting, and ocular disease screening.
+              </p>
+            </div>
           </div>
         </div>
 

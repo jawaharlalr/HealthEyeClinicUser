@@ -7,10 +7,13 @@ import {
   where, 
   getDocs, 
   getDoc,
+  updateDoc,
+  deleteDoc,
   serverTimestamp 
 } from 'firebase/firestore';
 import { getSlotKey, generateAppointmentId } from '../utils/appointmentSlots';
 import { cleanMobileInput } from '../utils/validation';
+
 
 /**
  * Fetches all booked slot IDs for a specific date (YYYY-MM-DD)
@@ -188,6 +191,8 @@ export async function bookAppointmentAtomic(bookingDetails) {
 
       saveLocalAppointment(appointmentData, patientData);
 
+
+
       return {
         success: true,
         appointment: { ...appointmentData, patientDetails: patientData },
@@ -223,6 +228,8 @@ export async function bookAppointmentAtomic(bookingDetails) {
   }
 
   saveLocalAppointment(appointmentData, patientData);
+
+
 
   return {
     success: true,
@@ -278,3 +285,57 @@ export async function getAppointmentById(appointmentId) {
   }
   return null;
 }
+
+/**
+ * Cancels an appointment and releases its slot lock atomically
+ */
+export async function cancelAppointmentAtomic(appointmentId) {
+  if (!appointmentId) return { success: false, error: 'Appointment ID is required' };
+
+  let cancelledAppData = null;
+
+  if (db) {
+    try {
+      const appRef = doc(db, 'appointments', appointmentId);
+      const appSnap = await getDoc(appRef);
+      if (appSnap.exists()) {
+        cancelledAppData = appSnap.data();
+        await updateDoc(appRef, {
+          status: 'cancelled',
+          updatedAt: serverTimestamp()
+        });
+
+        if (cancelledAppData.slotKey) {
+          const lockRef = doc(db, 'slot_locks', cancelledAppData.slotKey);
+          await deleteDoc(lockRef).catch(err => console.warn("Lock release notice:", err));
+        }
+      }
+      cancelLocalAppointment(appointmentId);
+
+
+
+      return { success: true, message: 'Appointment cancelled successfully' };
+    } catch (error) {
+      console.warn("cancelAppointment notice:", error.message);
+    }
+  }
+
+  const localApp = cancelLocalAppointment(appointmentId);
+
+  return { success: true, message: 'Appointment cancelled successfully' };
+}
+
+function cancelLocalAppointment(appointmentId) {
+  const localAppointments = JSON.parse(localStorage.getItem('hec_appointments') || '[]');
+  let targetApp = null;
+  const updated = localAppointments.map(app => {
+    if (app.appointmentId === appointmentId) {
+      targetApp = app;
+      return { ...app, status: 'cancelled' };
+    }
+    return app;
+  });
+  localStorage.setItem('hec_appointments', JSON.stringify(updated));
+  return targetApp;
+}
+

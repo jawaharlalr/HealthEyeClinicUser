@@ -6,10 +6,11 @@ import SlotSelector from '../components/SlotSelector';
 import PatientForm from '../components/PatientForm';
 import BookingSummary from '../components/BookingSummary';
 import ExistingPatientModal from '../components/ExistingPatientModal';
-import { getBookedSlotsForDate, bookAppointmentAtomic, getAppointmentsByMobile } from '../firebase/appointmentService';
+import { bookAppointmentAtomic, getAppointmentsByMobile, cancelAppointmentAtomic } from '../firebase/appointmentService';
 import { isMonday, isPastDate, formatReadableDate, CLINIC_INFO } from '../utils/appointmentSlots';
 import { cleanMobileInput } from '../utils/validation';
-import { UserCheck, FileText, ArrowLeft, Calendar, Search, History, MapPin, Phone, Info, CheckCircle, AlertCircle } from 'lucide-react';
+import { useSlotAvailability } from '../hooks/useSlotAvailability';
+import { UserCheck, FileText, ArrowLeft, Calendar, Search, History, MapPin, Phone, Info, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 
 export default function Appointment() {
   const navigate = useNavigate();
@@ -23,9 +24,8 @@ export default function Appointment() {
   const [showExistingModal, setShowExistingModal] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState('');
-  const [bookedSlotIds, setBookedSlotIds] = useState([]);
-  const [loadingSlots, setLoadingSlots] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const { bookedSlotIds, loadingSlots } = useSlotAvailability(selectedDate, selectedSlot, setSelectedSlot);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -47,6 +47,7 @@ export default function Appointment() {
   const [pastAppointments, setPastAppointments] = useState(null);
   const [loadingPast, setLoadingPast] = useState(false);
   const [pastError, setPastError] = useState('');
+  const [cancellingId, setCancellingId] = useState(null);
 
   // Initialize with next valid clinic day
   useEffect(() => {
@@ -65,28 +66,21 @@ export default function Appointment() {
     }
   }, [selectedDate]);
 
-  // Fetch live availability for selected date
-  useEffect(() => {
-    if (selectedDate && !isMonday(selectedDate) && !isPastDate(selectedDate)) {
-      setLoadingSlots(true);
-      getBookedSlotsForDate(selectedDate)
-        .then(slots => {
-          setBookedSlotIds(slots);
-          if (selectedSlot && slots.includes(selectedSlot.id)) {
-            setSelectedSlot(null);
-          }
-        })
-        .catch(err => {
-          console.warn("Availability notice:", err);
-          setBookedSlotIds([]);
-        })
-        .finally(() => {
-          setLoadingSlots(false);
-        });
-    } else {
-      setBookedSlotIds([]);
+  const handleCancelAppointment = async (appId) => {
+    if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
+    setCancellingId(appId);
+    try {
+      const res = await cancelAppointmentAtomic(appId);
+      if (res.success && pastMobile) {
+        const updatedList = await getAppointmentsByMobile(pastMobile);
+        setPastAppointments(updatedList);
+      }
+    } catch (err) {
+      console.warn("Cancel error:", err);
+    } finally {
+      setCancellingId(null);
     }
-  }, [selectedDate, selectedSlot]);
+  };
 
   const handleSelectPatientType = (type) => {
     setPatientType(type);
@@ -615,6 +609,21 @@ export default function Appointment() {
 
                       {/* Dynamic Instructions & Before You Visit per Status */}
                       {renderDynamicInstructions(app)}
+
+                      {/* Cancel Action for active bookings */}
+                      {(app.status === 'booked' || app.status === 'Booked' || app.status === 'confirmed' || app.status === 'Confirmed') && (
+                        <div className="pt-2 flex justify-end border-t border-slate-200">
+                          <button
+                            type="button"
+                            disabled={cancellingId === app.appointmentId}
+                            onClick={() => handleCancelAppointment(app.appointmentId || app.id)}
+                            className="inline-flex items-center space-x-1.5 text-xs font-bold text-pink-700 bg-pink-50 hover:bg-pink-100 border border-pink-200 px-3.5 py-2 rounded-xl transition disabled:opacity-50"
+                          >
+                            <XCircle className="w-4 h-4 text-pink-600" />
+                            <span>{cancellingId === app.appointmentId ? 'Cancelling...' : 'Cancel Appointment'}</span>
+                          </button>
+                        </div>
+                      )}
 
                     </div>
                   ))}

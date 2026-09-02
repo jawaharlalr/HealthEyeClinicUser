@@ -67,6 +67,21 @@ export default function BookingSummary({
           </div>
         </div>
 
+        {/* Attending Specialist Banner */}
+        <div className="bg-teal-50/80 border border-teal-200 rounded-xl p-3.5 flex items-center space-x-3 text-slate-800">
+          <div className="w-10 h-10 rounded-full bg-teal-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm flex-shrink-0">
+            NK
+          </div>
+          <div>
+            <span className="text-[11px] font-bold text-teal-700 uppercase tracking-wider block">
+              Attending Vision Specialist
+            </span>
+            <span className="text-sm font-extrabold text-slate-900 block">
+              {CLINIC_INFO.optometristTitle}
+            </span>
+          </div>
+        </div>
+
         {/* Patient Profile Summary */}
         <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
           <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">

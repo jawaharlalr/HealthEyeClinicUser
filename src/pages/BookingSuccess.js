@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckCircle2, Calendar, Clock, MapPin, Phone, Home, PlusCircle, ShieldCheck, AlertCircle, Info } from 'lucide-react';
+import { CheckCircle2, Calendar, Clock, MapPin, Phone, Home, PlusCircle, ShieldCheck, AlertCircle, Info, Download, ExternalLink, MessageSquare } from 'lucide-react';
 import { getAppointmentById } from '../firebase/appointmentService';
-import { CLINIC_INFO, formatReadableDate } from '../utils/appointmentSlots';
+import { CLINIC_INFO, formatReadableDate, generateGoogleCalendarUrl, downloadIcsFile } from '../utils/appointmentSlots';
 
 export default function BookingSuccess() {
   const [searchParams] = useSearchParams();
@@ -139,6 +139,55 @@ export default function BookingSuccess() {
 
           </div>
 
+          {/* Attending Vision Specialist Badge */}
+          <div className="bg-teal-50/90 border border-teal-200 rounded-xl p-4 flex items-center justify-between gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-teal-700 text-white font-extrabold flex items-center justify-center text-sm shadow-sm flex-shrink-0">
+                NK
+              </div>
+              <div>
+                <span className="text-xs font-bold text-teal-700 uppercase tracking-wider block">
+                  Attending Vision Specialist
+                </span>
+                <span className="text-base font-extrabold text-slate-900 block">
+                  {CLINIC_INFO.optometristTitle}
+                </span>
+              </div>
+            </div>
+            <span className="text-xs font-semibold text-teal-800 bg-teal-100/80 px-3 py-1 rounded-full hidden sm:inline-block border border-teal-200">
+              Lead Optometrist
+            </span>
+          </div>
+
+          {/* Smart Calendar Actions */}
+          <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block border-b border-slate-100 pb-2 flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 text-teal-600" />
+              <span>Save to Calendar</span>
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <a
+                href={generateGoogleCalendarUrl(appointment)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition"
+              >
+                <ExternalLink className="w-4 h-4 text-teal-400" />
+                <span>Add to Google Calendar</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => downloadIcsFile(appointment)}
+                className="w-full inline-flex items-center justify-center space-x-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl transition border border-slate-200"
+              >
+                <Download className="w-4 h-4 text-teal-600" />
+                <span>Download .ics File</span>
+              </button>
+            </div>
+          </div>
+
           {/* Clinic Address Box */}
           <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2 text-xs text-slate-600">
             <span className="font-bold text-slate-900 uppercase block border-b border-slate-100 pb-1">
@@ -195,13 +244,23 @@ export default function BookingSuccess() {
           <p className="text-xs sm:text-sm text-slate-600">
             If you need to reschedule or cancel your appointment, please contact the clinic at <strong>{CLINIC_INFO.phone}</strong>.
           </p>
-          <div className="pt-1">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
             <a
               href={`tel:${CLINIC_INFO.phone.replace(/\s/g, '')}`}
-              className="inline-flex items-center space-x-1.5 text-sm font-extrabold text-teal-700 bg-white border border-teal-200 px-4 py-2 rounded-xl shadow-sm hover:bg-teal-50 transition"
+              className="inline-flex items-center space-x-1.5 text-xs font-extrabold text-teal-800 bg-white border border-teal-200 px-4 py-2 rounded-xl shadow-sm hover:bg-teal-50 transition"
             >
-              <Phone className="w-4 h-4 text-teal-600" />
+              <Phone className="w-3.5 h-3.5 text-teal-600" />
               <span>Call Clinic: {CLINIC_INFO.phone}</span>
+            </a>
+
+            <a
+              href={`https://wa.me/91${CLINIC_INFO.phone.replace(/\s/g, '')}?text=${encodeURIComponent(`Hello Healthy Eye Clinic, I have an appointment (${appointment.appointmentId}) on ${appointment.date} at ${appointment.slot}.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl shadow-sm hover:bg-emerald-100 transition"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Message on WhatsApp</span>
             </a>
           </div>
           <p className="text-[11px] text-slate-500 italic">
