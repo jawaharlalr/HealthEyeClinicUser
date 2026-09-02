@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, CheckCircle2, Lock, AlertCircle } from 'lucide-react';
+import { Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { CLINIC_SLOTS, formatReadableDate, isSlotInPast, isToday } from '../utils/appointmentSlots';
 
 export default function SlotSelector({
@@ -10,11 +10,11 @@ export default function SlotSelector({
   loading = false,
   onChangeDate
 }) {
-  // Check if every slot is either already booked or has passed in Asia/Kolkata time
-  const isAllUnavailable = CLINIC_SLOTS.every((slot) => {
+  // Filter out all passed slots and booked slots, leaving ONLY remaining available slots
+  const availableSlots = CLINIC_SLOTS.filter((slot) => {
     const isBooked = bookedSlotIds.includes(slot.id);
     const isPassed = isSlotInPast(selectedDate, slot.startTime);
-    return isBooked || isPassed;
+    return !isBooked && !isPassed;
   });
 
   const dateIsToday = isToday(selectedDate);
@@ -48,7 +48,7 @@ export default function SlotSelector({
             Checking available times...
           </p>
         </div>
-      ) : isAllUnavailable ? (
+      ) : availableSlots.length === 0 ? (
         <div className="p-6 bg-pink-50 border border-pink-200 rounded-2xl text-center space-y-4 animate-fadeIn">
           <AlertCircle className="w-10 h-10 text-pink-600 mx-auto" />
           <div>
@@ -73,57 +73,9 @@ export default function SlotSelector({
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {CLINIC_SLOTS.map((slot) => {
-            const isBooked = bookedSlotIds.includes(slot.id);
-            const isPassed = isSlotInPast(selectedDate, slot.startTime);
+          {availableSlots.map((slot) => {
             const isSelected = selectedSlot && selectedSlot.id === slot.id;
 
-            // Slot in past (time has passed)
-            if (isPassed) {
-              return (
-                <div
-                  key={slot.id}
-                  className="p-5 rounded-2xl border-2 border-slate-200 bg-slate-100 text-slate-400 flex flex-col justify-between h-28 cursor-not-allowed select-none opacity-60"
-                  title="This time slot has already passed"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-base sm:text-lg font-extrabold text-slate-400 line-through">
-                      {slot.label}
-                    </span>
-                    <Clock className="w-4 h-4 text-slate-400" />
-                  </div>
-                  <div>
-                    <span className="inline-block text-[11px] bg-slate-200 text-slate-500 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                      Passed
-                    </span>
-                  </div>
-                </div>
-              );
-            }
-
-            // Slot already booked
-            if (isBooked) {
-              return (
-                <div
-                  key={slot.id}
-                  className="p-5 rounded-2xl border-2 border-slate-200 bg-slate-100 text-slate-400 flex flex-col justify-between h-28 cursor-not-allowed select-none opacity-75"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-base sm:text-lg font-extrabold text-slate-500 line-through">
-                      {slot.label}
-                    </span>
-                    <Lock className="w-4 h-4 text-slate-400" />
-                  </div>
-                  <div>
-                    <span className="inline-block text-[11px] bg-pink-100 text-pink-700 font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                      Booked
-                    </span>
-                  </div>
-                </div>
-              );
-            }
-
-            // Available future slot
             return (
               <button
                 key={slot.id}
