@@ -130,12 +130,7 @@ export default function Appointment() {
         patientType,
         fullName: formData.fullName,
         mobile: formData.mobile,
-        email: formData.email,
-        dateOfBirth: formData.dateOfBirth,
-        gender: formData.gender,
-        bloodGroup: formData.bloodGroup,
-        bloodGroupOther: formData.bloodGroupOther,
-        address: formData.address,
+        notes: formData.notes,
         patientId: formData.patientId
       });
 

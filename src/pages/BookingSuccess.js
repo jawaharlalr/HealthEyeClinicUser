@@ -79,10 +79,10 @@ export default function BookingSuccess() {
             <CheckCircle2 className="w-12 h-12" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Appointment Confirmed
+            Appointment Request Received Successfully
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600">
-            Your appointment has been scheduled with <strong>{CLINIC_INFO.name}</strong>.
+          <p className="text-sm sm:text-base font-semibold text-slate-700 max-w-xl mx-auto leading-relaxed">
+            Our clinic will contact you shortly to confirm your appointment.
           </p>
         </div>
 

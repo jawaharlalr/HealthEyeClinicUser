@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Clock, Calendar, Navigation, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Clock, Calendar, Navigation, ExternalLink, PhoneCall } from 'lucide-react';
 import { CLINIC_INFO } from '../utils/appointmentSlots';
 
 export default function Contact() {
+  const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(`${CLINIC_INFO.name}, ${CLINIC_INFO.address}`)}`;
+  const phoneUrl = `tel:${CLINIC_INFO.phone.replace(/\s/g, '')}`;
+
   return (
     <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-3.5 py-1 rounded-full border border-teal-200">
+        <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-200">
           Contact & Location Guide
         </span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -25,50 +28,79 @@ export default function Contact() {
         {/* Left Information Cards */}
         <div className="lg:col-span-5 space-y-6">
           
-          {/* Address Card */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-card space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center">
-              <MapPin className="w-5 h-5" />
+          {/* Address Card with Get Directions */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-card space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900">Clinic Address</h3>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Clinic Address</h3>
+            
             <p className="text-sm text-slate-700 leading-relaxed">
               <strong>{CLINIC_INFO.name}</strong><br />
               12A, Surya Nagar, 1st Cross Street,<br />
               Medavakkam, Chennai – 600100
             </p>
-            <a
-              href="https://maps.google.com/?q=12A+Surya+Nagar+1st+Cross+Street+Medavakkam+Chennai+600100"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1.5 text-xs font-bold text-teal-700 hover:text-teal-800 pt-1"
-            >
-              <span>Open in Google Maps</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+
+            <div className="pt-2 flex flex-wrap gap-2">
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 px-4 py-2.5 rounded-xl transition shadow-sm"
+              >
+                <Navigation className="w-4 h-4 text-teal-400" />
+                <span>Get Directions</span>
+              </a>
+
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1.5 text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 px-3.5 py-2.5 rounded-xl border border-teal-200 transition"
+              >
+                <span>Google Maps</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
-          {/* Phone & Booking */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-card space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
-              <Phone className="w-5 h-5" />
+          {/* Phone & Booking with Call Now */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-card space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                <Phone className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900">Appointment Phone</h3>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Appointment Phone</h3>
-            <p className="text-sm text-slate-600">
+
+            <p className="text-xs sm:text-sm text-slate-600">
               For direct appointment booking and inquiries:
             </p>
             <a
-              href={`tel:${CLINIC_INFO.phone.replace(/\s/g, '')}`}
-              className="text-xl font-extrabold text-teal-700 hover:text-teal-800 block"
+              href={phoneUrl}
+              className="text-2xl font-extrabold text-teal-800 hover:text-teal-900 block"
             >
               {CLINIC_INFO.phone}
             </a>
+
+            <div className="pt-1">
+              <a
+                href={phoneUrl}
+                className="inline-flex items-center space-x-2 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow transition"
+              >
+                <PhoneCall className="w-4 h-4 text-white" />
+                <span>Call Now: {CLINIC_INFO.phone}</span>
+              </a>
+            </div>
           </div>
 
           {/* Working Hours */}
-          <div className="bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 shadow-xl space-y-4">
+          <div className="bg-slate-900 text-white rounded-3xl p-6 border border-slate-800 shadow-xl space-y-4">
             <div className="flex items-center space-x-2 text-teal-400">
               <Clock className="w-5 h-5" />
-              <h3 className="text-base font-bold text-white">Clinic Working Schedule</h3>
+              <h3 className="text-base font-extrabold text-white">Clinic Working Schedule</h3>
             </div>
 
             <div className="space-y-2 text-xs sm:text-sm">
@@ -84,7 +116,7 @@ export default function Contact() {
 
             <Link
               to="/appointment"
-              className="w-full inline-flex items-center justify-center space-x-2 bg-teal-500 hover:bg-teal-600 text-slate-950 font-bold py-3 rounded-xl transition text-xs shadow-md"
+              className="w-full inline-flex items-center justify-center space-x-2 bg-teal-500 hover:bg-teal-400 text-slate-950 font-extrabold py-3 rounded-xl transition text-xs shadow-md"
             >
               <Calendar className="w-4 h-4" />
               <span>Book Appointment Online</span>
@@ -95,7 +127,7 @@ export default function Contact() {
 
         {/* Right Map View */}
         <div className="lg:col-span-7">
-          <div className="bg-white rounded-3xl p-4 border border-slate-200 shadow-card h-full min-h-[400px] flex flex-col">
+          <div className="bg-white rounded-3xl p-4 border border-slate-200 shadow-card h-full min-h-[420px] flex flex-col">
             <div className="p-3 border-b border-slate-100 flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                 <Navigation className="w-4 h-4 text-teal-600" />
@@ -106,11 +138,11 @@ export default function Contact() {
               </span>
             </div>
 
-            <div className="flex-1 rounded-2xl overflow-hidden mt-3 relative min-h-[350px]">
+            <div className="flex-1 rounded-2xl overflow-hidden mt-3 relative min-h-[360px]">
               <iframe
                 title="Healthy Eye Clinic Location Map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.665279589311!2d80.18708331482156!3d12.929218990883654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a525c1157b1ef01%3A0x6b87201b13854125!2sSurya%20Nagar%2C%20Medavakkam%2C%20Chennai%2C%20Tamil%20Nadu%20600100!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin"
-                className="w-full h-full border-0 absolute inset-0 min-h-[350px]"
+                className="w-full h-full border-0 absolute inset-0 min-h-[360px]"
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

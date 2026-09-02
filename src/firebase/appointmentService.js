@@ -14,7 +14,6 @@ import {
 import { getSlotKey, generateAppointmentId } from '../utils/appointmentSlots';
 import { cleanMobileInput } from '../utils/validation';
 
-
 /**
  * Fetches all booked slot IDs for a specific date (YYYY-MM-DD)
  */
@@ -107,11 +106,7 @@ export async function bookAppointmentAtomic(bookingDetails) {
     fullName,
     mobile,
     email,
-    dateOfBirth,
-    gender,
-    bloodGroup,
-    bloodGroupOther,
-    address,
+    notes,
     patientId: existingPatientId
   } = bookingDetails;
 
@@ -130,7 +125,8 @@ export async function bookAppointmentAtomic(bookingDetails) {
     patientId,
     patientName: fullName.trim(),
     mobile: normalizedMobile,
-    email: email.trim(),
+    email: (email || '').trim(),
+    notes: (notes || '').trim(),
     patientType,
     date: dateStr,
     slotId: slot.id,
@@ -147,12 +143,7 @@ export async function bookAppointmentAtomic(bookingDetails) {
     patientId,
     fullName: fullName.trim(),
     mobile: normalizedMobile,
-    email: email.trim(),
-    dateOfBirth: dateOfBirth || '',
-    gender: gender || '',
-    bloodGroup: bloodGroup || '',
-    bloodGroupOther: bloodGroup === 'Other / Rare' ? (bloodGroupOther ? bloodGroupOther.trim() : '') : '',
-    address: address.trim(),
+    email: (email || '').trim(),
     updatedAt: timestamp,
     createdAt: timestamp
   };
@@ -191,8 +182,6 @@ export async function bookAppointmentAtomic(bookingDetails) {
 
       saveLocalAppointment(appointmentData, patientData);
 
-
-
       return {
         success: true,
         appointment: { ...appointmentData, patientDetails: patientData },
@@ -228,8 +217,6 @@ export async function bookAppointmentAtomic(bookingDetails) {
   }
 
   saveLocalAppointment(appointmentData, patientData);
-
-
 
   return {
     success: true,
@@ -312,8 +299,6 @@ export async function cancelAppointmentAtomic(appointmentId) {
       }
       cancelLocalAppointment(appointmentId);
 
-
-
       return { success: true, message: 'Appointment cancelled successfully' };
     } catch (error) {
       console.warn("cancelAppointment notice:", error.message);
@@ -338,4 +323,3 @@ function cancelLocalAppointment(appointmentId) {
   localStorage.setItem('hec_appointments', JSON.stringify(updated));
   return targetApp;
 }
-

@@ -38,35 +38,15 @@ export function validatePatientForm(formData) {
   const errors = {};
 
   if (!formData.fullName || !validateName(formData.fullName)) {
-    errors.fullName = 'Please enter a valid name.';
+    errors.fullName = 'Please enter a valid patient name.';
   }
 
   if (!formData.mobile || !validateIndianMobile(formData.mobile)) {
     errors.mobile = 'Please enter a valid 10-digit mobile number.';
   }
 
-  if (!formData.email || !validateEmail(formData.email)) {
+  if (formData.email && formData.email.trim() !== '' && !validateEmail(formData.email)) {
     errors.email = 'Please enter a valid email address.';
-  }
-
-  if (!formData.dateOfBirth) {
-    errors.dateOfBirth = 'Please select your date of birth.';
-  }
-
-  if (!formData.gender) {
-    errors.gender = 'Please select your gender.';
-  }
-
-  if (!formData.bloodGroup) {
-    errors.bloodGroup = 'Please select your blood group.';
-  }
-
-  if (formData.bloodGroup === 'Other / Rare' && (!formData.bloodGroupOther || formData.bloodGroupOther.trim() === '')) {
-    errors.bloodGroupOther = 'Please specify your blood group.';
-  }
-
-  if (!formData.address || formData.address.trim().length < 3) {
-    errors.address = 'Please enter your address.';
   }
 
   return {

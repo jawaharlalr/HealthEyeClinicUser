@@ -39,15 +39,11 @@ describe('validation utilities', () => {
     expect(validateEmail('')).toBe(false);
   });
 
-  test('validatePatientForm validates required patient fields', () => {
+  test('validatePatientForm validates required patient fields (Name and Mobile)', () => {
     const validForm = {
       fullName: 'Rahul Sharma',
       mobile: '9876543210',
-      email: 'rahul@example.com',
-      dateOfBirth: '1995-05-15',
-      gender: 'Male',
-      bloodGroup: 'O+',
-      address: '123 Main St, Medavakkam'
+      notes: 'First time visit'
     };
 
     const res = validatePatientForm(validForm);
@@ -58,18 +54,12 @@ describe('validation utilities', () => {
   test('validatePatientForm rejects incomplete forms', () => {
     const invalidForm = {
       fullName: 'R',
-      mobile: '123',
-      email: 'bad',
-      dateOfBirth: '',
-      gender: '',
-      bloodGroup: '',
-      address: ''
+      mobile: '123'
     };
 
     const res = validatePatientForm(invalidForm);
     expect(res.isValid).toBe(false);
     expect(res.errors.fullName).toBeDefined();
     expect(res.errors.mobile).toBeDefined();
-    expect(res.errors.email).toBeDefined();
   });
 });

@@ -1,0 +1,5 @@
+# Robots.txt for Healthy Eye Clinic & Opticals
+User-agent: *
+Allow: /
+
+Sitemap: https://healthyeyeclinic.vercel.app/sitemap.xml
